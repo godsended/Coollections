@@ -1,0 +1,74 @@
+@{
+    ViewBag.Title = "Registration";
+    Layout = "_Layout";
+}
+
+<br/>
+<form class="col-lg-6 offset-lg-3 ">
+    <fieldset class="row justify-content-center">
+        <legend>
+            <h1 class="text-center">Registration</h1>
+        </legend>
+        <div class="form-group">
+            <label for="nameInput" class="form-label mt-4">Name</label>
+            <input name="Name" type="text"
+                   class="form-control" id="nameInput" aria-describedby="nameHelp" placeholder="Enter name">
+        </div>
+        <div class="form-group">
+            <label for="emailInput" class="form-label mt-4">Email address</label>
+            <input name="Email" type="email"
+                   class="form-control" id="emailInput" aria-describedby="emailHelp" placeholder="Enter email">
+        </div>
+        <div class="form-group">
+            <label for="passwordInput" class="form-label mt-4">Enter password</label>
+            <input name="Password" type="password" class="form-control" id="passwordInput" placeholder="Password">
+        </div>
+        <div>
+            <small id="regError"></small>
+        </div>
+    </fieldset>
+</form>
+<div class="col-lg-6 offset-lg-3 " style="margin-top: 20px">
+    <button onclick="requestRegistration()" type="button" class="btn btn-primary d-inline">
+        Register
+    </button>
+    <button onclick="openLogin()" class="d-inline btn btn-outline-secondary">
+        Login
+    </button>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $(window).keydown(function(event){
+            if(event.keyCode == 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
+    });
+    function requestRegistration()
+    {
+        let name = document.getElementsByName("Name")[0].value;
+        let email = document.getElementsByName("Email")[0].value;
+        let password = document.getElementsByName("Password")[0].value;
+        let errorField = document.getElementById("regError");
+        let reqData = {Name: name, Email: email, Password: password}
+        $.ajax({
+            type: "POST",
+            url: "https://localhost:7177/Auth/ProcessRegistration",
+            data: reqData,
+            success: function (result) {
+                console.log(result);
+                if (result.code == 0)
+                    window.location.href = "https://localhost:7177/Home";
+                else errorField.innerText = result.message;
+            },
+            dataType: "json"
+        });
+    }
+    
+    function openLogin()
+    {
+        window.location.href = "https://localhost:7177/Auth/Login";
+    }
+</script>
