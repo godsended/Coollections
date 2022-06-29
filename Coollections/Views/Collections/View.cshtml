@@ -1,0 +1,266 @@
+@using Coollections.Models.Database.Items
+@model Coollections.ViewModels.CollectionViewModel
+
+@{
+    ViewBag.Title = @Model.Collection.Name;
+    Layout = "_Layout";
+}
+
+<div class="col-lg-6 offset-lg-3">
+    <div class="rounded-2"
+         style="margin-top: 10px;margin-left: 0; margin-right: 0; padding: 0 10px;
+                                                    height: 100%;
+                                                    background: rgba(0, 0, 0, 0.3) url(@Model.Collection.Image) no-repeat center;
+                                                    background-size: cover;
+                                                    background-blend-mode: darken;">
+        <div class="w-auto h-auto d-inline"
+             style="">
+            <h4 class="mb-4 d-inline">
+                <a>@Model.Collection.Name</a>
+            </h4>
+            <p class="dark-grey-text">
+                @Model.Collection.Description
+            </p>
+            <small>Owner: @Model.AuthorName</small>
+        </div>
+        <button type="button" class="btn btn-primary btn-sm d-inline float-end" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            + Add
+        </button>
+    </div>
+
+    <table id="viewTable" class="table table-hover table-striped overflow-auto">
+        <thead class="sticky-top">
+        <tr>
+            <td>Name</td>
+            <td>Tags</td>
+        </tr>
+        </thead>
+        <tbody>
+        @for (int i = 0; i < Model.DataGroups.Count; i++)
+        {
+            List<Data> group = Model.DataGroups[i];
+
+            <tr>
+                <td class="user-select-none">
+                    <a onclick="collapse(@i)" style="cursor: pointer">
+                        @Model.Data.FirstOrDefault(d => d.FieldId == Model.NameFieldId
+                                                        && group.FirstOrDefault(d2 => d.Id == d2.Id) != null)?.Content
+                    </a>
+                </td>
+                <td class="user-select-none">
+                    @Model.Data.FirstOrDefault(d => d.FieldId == Model.TagsFieldId && group.Contains(d))?.Content
+                </td>
+            </tr>
+            <tr>
+                <td colspan="@Model.Fields.Count.ToString()">
+                    <div id=@i class="collapse">
+                        @foreach (var field in Model.Fields)
+                        {
+                            <div style="margin: 5px; padding: 2px 5px" class="rounded d-inline-block bg-opacity-50 bg-secondary">
+                                <span class="d-inline bg-primary badge"
+                                      style="padding-top: -1px; padding-left: -1px">
+                                    <h6 class="d-inline text-muted">@field.Name</h6>
+                                </span>
+                                <p class="d-inline" style="padding: 0; margin: 0">
+                                    @group.FirstOrDefault(d => d.FieldId == field.Id)?.Content
+                                </p>
+                            </div>
+                        }
+                        <div>
+                            <button onclick="deleteItem(@Model.DataGroups[i][0].Item)"
+                                    style="margin: 2px" class="btn btn-danger btn-sm float-end">
+                                Delete
+                            </button>
+                            <button style="margin: 2px" class="btn btn-info btn-sm float-end"
+                                    data-bs-toggle="modal" data-bs-target="#staticEditBackdrop"
+                                    onclick="editItem(@i, @Model.DataGroups[i][0].Item)">
+                                Edit
+                            </button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">New item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @foreach (var field in Model.Fields)
+                {
+                    <div class='mb-3'>
+                        <div>
+                            @field.Name
+                        </div>
+                        @switch (field.Type)
+                        {
+                            case "Checkbox":
+                            {
+                                <div class="btn-group" role="group">
+                                    <input id=@Model.NextCheckboxId type="radio" class="btn-check input" name="@field.Id" value="True">
+                                    <label for=@Model.NextCheckboxId class="btn btn-outline-primary">True</label>
+                                    <input id=@Model.NextCheckboxId type="radio" class="btn-check input" name="@field.Id" value="False">
+                                    <label for=@Model.NextCheckboxId class="btn btn-outline-primary">False</label>
+                                </div>
+                                break;
+                            }
+                            case "Number":
+                            {
+                                <input class='form-control input' name="@field.Id" type="number"/>
+                                break;
+                            }
+                            case "Date":
+                            {
+                                <input class='form-control input' name="@field.Id" type="date"/>
+                                break;
+                            }
+                            case "Multiline text":
+                            {
+                                <textarea class='form-control input' name="@field.Id" type="number"></textarea>
+                                break;
+                            }
+                            default:
+                            {
+                                <input class='form-control input' name="@field.Id" type="text"/>
+                                break;
+                            }
+                        }
+                    </div>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="addItem(false)">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="staticEditBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Edit item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @foreach (var field in Model.Fields)
+                {
+                    <div class='mb-3'>
+                        <div>
+                            @field.Name
+                        </div>
+                        @switch (field.Type)
+                        {
+                            case "Checkbox":
+                            {
+                                <div class="btn-group" role="group">
+                                    <input id=@Model.NextCheckboxId type="radio" class="btn-check edit" name="@field.Id" value="True">
+                                    <label for=@Model.NextCheckboxId class="btn btn-outline-primary">True</label>
+                                    <input id=@Model.NextCheckboxId type="radio" class="btn-check edit" name="@field.Id" value="False">
+                                    <label for=@Model.NextCheckboxId class="btn btn-outline-primary">False</label>
+                                </div>
+                                break;
+                            }
+                            case "Number":
+                            {
+                                <input class='form-control edit' name="@field.Id" type="number"/>
+                                break;
+                            }
+                            case "Date":
+                            {
+                                <input class='form-control edit' name="@field.Id" type="date"/>
+                                break;
+                            }
+                            case "Multiline text":
+                            {
+                                <textarea class='form-control edit' name="@field.Id" type="number"></textarea>
+                                break;
+                            }
+                            default:
+                            {
+                                <input class='form-control edit' name="@field.Id" type="text"/>
+                                break;
+                            }
+                        }
+                    </div>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="addItem(true)">Edit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var currentItem;
+    
+    function addItem(isEdit){
+        let elements;
+        if (!isEdit)
+            elements = document.getElementsByClassName("input");
+        else 
+            elements = document.getElementsByClassName("edit");
+        let reqData = new Object();
+        for (let i = 0;i<elements.length;i++){
+            if (elements[i].type != "radio" || elements[i].checked == true){
+                reqData[elements[i].name] = elements[i].value;
+            }
+        }
+    
+        let url = "";
+        if (!isEdit)
+            url = "https://localhost:7177/Collections/AddItem/";
+        else
+            url = "https://localhost:7177/Collections/EditItem/" + currentItem.toString() + "/" + @Model.Collection.Id.ToString()
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: reqData,
+            success: function (result) {
+                console.log(result);
+                console.log(reqData);
+                if (result.isSuccess == true)
+                    window.location.reload();
+            },
+            dataType: "json"
+                });
+    }
+    function collapse(id){
+        let elem = document.getElementById(id);
+        if (elem.classList.contains("collapse"))
+            elem.classList.remove("collapse");
+        else
+            elem.classList.add("collapse");
+    }
+    
+    function deleteItem(item){
+        let reqData = {}
+                
+        $.ajax({
+            type: "POST",
+            url: "https://localhost:7177/Collections/Delete/" + item.toString() + "/" + @Model.Collection.Id.ToString(),
+            data: reqData,
+            success: function (result) {
+                console.log(result);
+                console.log(reqData);
+                if (result.isSuccess = true)
+                    window.location.reload();
+                },
+            dataType: "json"
+            });
+    }
+    
+    function editItem(index, item){
+        currentItem = item;
+    }
+</script>

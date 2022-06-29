@@ -1,18 +1,12 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Coollections.Models;
-using Microsoft.AspNetCore.Authorization;
+using Coollections.ViewModels;
 
 namespace Coollections.Controllers;
 
 public class HomeController : Controller
 {
-    public HomeController()
-    {
-    }
-
     [HttpGet]
-    [Authorize]
     public IActionResult Index()
     {
         return View();

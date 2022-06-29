@@ -2,9 +2,7 @@ using Coollections.Models;
 using Coollections.Models.Database;
 using Coollections.Models.Database.Items;
 using Coollections.Services;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Coollections.Controllers;
 
@@ -36,10 +34,11 @@ public class AuthController : Controller
     {
         if (ModelState.IsValid && viewData.IsValidForLogin())
         {
-            if (!await databaseContext.IsLoginDataCorrect(viewData.Email, viewData.Password).ConfigureAwait(false))
+            if (!await databaseContext.IsLoginDataCorrect(viewData.Email, viewData.Password))
                 return new ResponseModel() {IsSuccess = false, Message = "Incorrect login data" , Code = 2};
 
-            await auth.Authenticate(viewData.Email, false).ConfigureAwait(false);
+            await auth.Authenticate((await databaseContext.GetUserIdByEmail(viewData.Email)).ToString(), 
+                false).ConfigureAwait(false);
         }
         else return new ResponseModel() {IsSuccess = false, Message = "Invalid request data", Code = 1};
         
@@ -51,11 +50,11 @@ public class AuthController : Controller
     {
         if (ModelState.IsValid && viewData.IsValid())
         {
-            if (await databaseContext.ContainsUserWithEmail(viewData.Email).ConfigureAwait(false))
+            if (await databaseContext.ContainsUserWithEmail(viewData.Email))
                 return new ResponseModel() {IsSuccess = false, Message = "User already registered" , Code = 2};
             
-            await databaseContext.AddUser(viewData).ConfigureAwait(false);
-            await auth.Authenticate(viewData.Email, false).ConfigureAwait(false);
+            int id = await databaseContext.AddUser(viewData);
+            await auth.Authenticate(id.ToString(), false);
         }
         else return new ResponseModel() {IsSuccess = false, Message = "Invalid request data" , Code = 1};
         

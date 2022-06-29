@@ -1,4 +1,4 @@
-namespace Coollections.Models;
+namespace Coollections.ViewModels;
 
 public class ErrorViewModel
 {

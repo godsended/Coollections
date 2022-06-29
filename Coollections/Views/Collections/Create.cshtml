@@ -1,0 +1,150 @@
+@using Coollections.Models.Database.Items
+
+@model Coollections.ViewModels.CreateCollectionViewModel
+
+@{
+    ViewBag.Title = "New collection";
+    Layout = "_Layout";
+}
+
+<form class="col-lg-6 offset-lg-3 ">
+    <fieldset class="row justify-content-center">
+        <legend>
+            <h1 class="display-2">New collection</h1>
+        </legend>
+        <div class="form-group">
+            <label for="nameInput" class="form-label mt-4">Name</label>
+            <input name="Name" type="text" class="form-control" id="nameInput" placeholder="Enter name">
+        </div>
+        <div class="form-group">
+            <label for="descriptionInput" class="form-label mt-4">Describe your collection</label>
+            <textarea class="form-control"id="descriptionInput"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="subjectInput" class="form-label mt-4">Subject</label>
+            <select name="Subject" class="form-control" id="subjectInput"
+                    placeholder="Enter name">
+                @foreach (Subject subject in Model.Subjects)
+                {
+                    <option>@subject.Name</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="imageInput" class="form-label mt-4">Collection image</label>
+            <input onchange="onImageUrlChanged()" name="Image" type="url" class="form-control"
+                   id="imageInput" placeholder="Type image url">
+            <image style="max-height: 100px" id="inputImagePreview" hidden="true"/>
+        </div>
+        <div>
+            <small id="error"></small>
+        </div>
+        <div>
+            <h2 class="display-6">Fields</h2>
+        </div>
+        <div id="recipientsParent" class="form-group"><div>
+                <div class='input-group mb-3'>
+                    <div class='input-group-prepend'>
+                        <span class='input-group-text' id='basic-addon1'>
+                            <input name="Type" class="form-control" type="text" readonly="readonly" value="Text"/>
+                        </span>
+                    </div>
+                    <input name='FieldName' readonly="readonly" type='text' class='form-control' value="Name">
+                </div>
+            </div><div>
+                <div class='input-group mb-3'>
+                    <div class='input-group-prepend'>
+                        <span class='input-group-text' id='basic-addon1'>
+                            <input name="Type" class="form-control" type="text" readonly="readonly" value="Text"/>
+                        </span>
+                    </div>
+                    <input name='FieldName' readonly="readonly" type='text' class='form-control' value="Tags">
+                </div>
+            </div></div>
+    </fieldset>
+</form>
+<div class="col-lg-6 offset-lg-3 ">
+    <button style="height: 50px; width: 50px; padding: 0"
+            class="btn btn-outline-light" onclick="addRecipient()">
+        +
+    </button>
+    <button style="height: 50px; width: 50px; padding: 0"
+            class="btn btn-outline-dark" onclick="removeRecipient()">
+        -
+    </button>
+</div>
+<div class="col-lg-6 offset-lg-3 " style="margin-top: 20px">
+    <button onclick="createCollection()" type="button" class="btn btn-primary d-inline">
+        Create
+    </button>
+</div>
+
+<script>
+    function onImageUrlChanged()
+    {
+        let img = document.getElementById("inputImagePreview");
+        let input = document.getElementById("imageInput");
+        img.src = input.value;
+        if (input.value != "")
+            img.hidden = false;
+        else
+            img.hidden = true;
+    }
+    
+    function addRecipient() {
+        let element = document.createElement('div')
+        element.class="input-group mb-3";
+        element.innerHTML = "<div class='input-group mb-3'>" +
+                            "<div class='input-group-prepend'>" +
+                            "<span class='input-group-text' id='basic-addon1'>" +
+                            "<select name='Type' class='form-select'>" +
+                            "<option>Number</option>" +
+                            "<option>Text</option>" +
+                            "<option>Multiline text</option>" +
+                            "<option>Checkbox</option>" +
+                            "<option>Date</option>" +
+                            "</select>" +
+                            "</span>" +
+                            "</div>" +
+                            "<input name='FieldName' type='text' class='form-control' placeholder='Type field name'" +
+                            "</div>"
+        document.getElementById('recipientsParent').appendChild(element);
+        }
+    function removeRecipient() {
+        var element = document.getElementById("recipientsParent");
+        console.log(element.childNodes);
+        console.log(element.childNodes.length);
+        if (element.childNodes.length>2)
+        {
+            element.removeChild(element.lastChild);
+        }
+        console.log(element.childNodes);
+                console.log(element.childNodes.length);
+    }
+    function createCollection() {
+        let name = document.getElementById("nameInput").value;
+        let description = document.getElementById("descriptionInput").value;
+        let subject = document.getElementById("subjectInput").value;
+        let collectionImage = document.getElementById("imageInput").value;
+        let fieldsTypes = [];
+        let fields = [];
+        for (let el of document.getElementsByName("Type")) {
+            fieldsTypes.push(el.value);
+        }
+        for (let el of document.getElementsByName("FieldName")) {
+            fields.push(el.value);
+        }
+        let reqData = {Name: name, Description: description, Subject: subject, ImageUrl: collectionImage, 
+        FieldsTypes: fieldsTypes, FieldsNames: fields };
+        $.ajax({
+            type: "POST",
+            url: "https://localhost:7177/Collections/Create",
+            data: reqData,
+            success: function (result) {
+                console.log(result);
+                if (result.isSuccess == true)
+                    window.location.href = "https://localhost:7177/User/Index";
+            }
+        })
+    }
+</script>

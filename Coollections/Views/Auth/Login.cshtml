@@ -7,7 +7,7 @@
 <form class="col-lg-6 offset-lg-3 ">
     <fieldset class="row justify-content-center">
         <legend>
-            <h1 class="text-center">Login</h1>
+            <h1 class="display-2 text-center">Login</h1>
         </legend>
         <div class="form-group">
             <label for="emailInput" class="form-label mt-4">Email address</label>
@@ -32,14 +32,6 @@
 </div>
 
 <script>
-    $(document).ready(function() {
-        $(window).keydown(function(event){
-            if(event.keyCode == 13) {
-                event.preventDefault();
-                return false;
-            }
-        });
-    });
     function requestLogin()
     {
         let email = document.getElementsByName("Email")[0].value;

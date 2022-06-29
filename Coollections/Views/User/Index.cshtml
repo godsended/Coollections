@@ -1,0 +1,50 @@
+@model Coollections.ViewModels.UserViewModel
+
+@{
+    ViewBag.Title = @Model.User.Name;
+    Layout = "_Layout";
+}
+
+<div class="col-lg-6 offset-lg-3">
+    <h1 class="display-2">@Model.User.Name</h1>
+    <div>
+        <h1 class="display-6 d-inline">Collections</h1>
+        <a asp-action="Create" asp-controller="Collections" class="btn btn-sm btn-outline-info"
+           style="margin-bottom: 10px; margin-left: 10px">
+            New
+        </a>
+    </div>
+</div>
+@if (Model.Collections != null)
+{
+    <section class="col-lg-6 offset-lg-3 ">
+        @foreach (var collection in Model.Collections)
+        {
+            <div class="w-auto h-auto rounded-2"
+                 style="margin-left: 0; margin-right: 0; padding: 0 10px;
+                 height: 100%;
+                 background: rgba(0, 0, 0, 0.3) url(@collection.Image) no-repeat center;
+                 background-size: cover;
+                 background-blend-mode: darken;">
+                <h4 class="mb-4 d-inline">
+                    <a href="@Url.Action("View", "Collections", new {Id = @collection.Id})">
+                        @collection.Name
+                    </a>
+                </h4>
+                <p class="dark-grey-text">
+                    @collection.Description
+                </p>
+            </div>
+            <hr style="margin: 10px"/>
+        }
+    </section>
+}
+
+<style>
+    .avatar {
+    height: 50px;
+    width: 50px;
+    overflow: fragments;
+    margin: 10px;
+    }
+</style>
