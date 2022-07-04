@@ -8,7 +8,10 @@ public class CollectionViewModel
     private readonly List<Field>? fields;
     private int checkboxId = 0;
     private int idCalls = 0;
-    public Collection Collection { get; set; } = null!;
+    
+    public bool IsEditable { get; init; }
+    
+    public Collection Collection { get; init; } = null!;
 
     public List<Data> Data
     {
@@ -18,9 +21,9 @@ public class CollectionViewModel
             if (value.Count > 0)
             {
                 data = value;
-                data.Sort((a, b) => a.Item.CompareTo(b.Item));
+                data.Sort((a, b) => a.ItemId.CompareTo(b.ItemId));
                 List<Data> group = new();
-                int itemNum = data[0].Item;
+                int itemNum = data[0].ItemId;
                 for (int i = 0; i < data.Count; i++)
                 {
                     Data item = data[i];
@@ -28,11 +31,11 @@ public class CollectionViewModel
                         group.Add(item);
                     else
                     {
-                        if (itemNum != item.Item)
+                        if (itemNum != item.ItemId)
                         {
                             group.Sort((a, b) => a.FieldId.CompareTo(b.FieldId));
                             DataGroups.Add(group);
-                            itemNum = item.Item;
+                            itemNum = item.ItemId;
                             group = new List<Data>();
                         }
 
@@ -57,14 +60,15 @@ public class CollectionViewModel
             TagsFieldId = fields!.First(f => f.Name == "Tags").Id;
         }
     }
-
-    public string AuthorName { get; set; } = null!;
+    
+    public string AuthorName { get; init; } = null!;
 
     public List<List<Data>> DataGroups { get; } = new();
 
-    public int NameFieldId { get; set; }
-    public int TagsFieldId { get; set; }
-
+    public int NameFieldId { get; init; }
+    
+    public int TagsFieldId { get; init; }
+    
     public int NextCheckboxId
     {
         get

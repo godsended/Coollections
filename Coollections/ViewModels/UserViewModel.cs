@@ -6,4 +6,6 @@ public class UserViewModel
 {
     public User User { get; set; } = null!;
     public IEnumerable<Collection>? Collections { get; set; }
+    
+    public bool IsEditable { get; set; }
 }

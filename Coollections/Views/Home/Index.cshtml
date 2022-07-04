@@ -1,8 +1,70 @@
-﻿@{
+﻿@model Coollections.ViewModels.HomeViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="col-lg-6 offset-lg-3 ">
+    <div>
+        <h1 class="display-6">Top collections</h1>
+        @foreach (var collection in Model.TopCollections)
+        {
+            <div class="w-auto h-auto rounded-2"
+                 style="margin-left: 0; margin-right: 0; padding: 0 10px;
+                          height: 100%;
+                          background: rgba(0, 0, 0, 0.3) url(@collection.Image) no-repeat center;
+                          background-size: cover;
+                          background-blend-mode: darken;">
+                <h4 class="mb-4 d-inline">
+                    <a href="@Url.Action("View", "Collections", new {Id = @collection.Id})">
+                        @collection.Name
+                    </a>
+                </h4>
+                <p class="dark-grey-text">
+                    @collection.Description
+                </p>
+            </div>
+            <hr style="margin: 10px"/>
+        }
+    </div>
+    <div>
+        <h1 class="display-6">Latest items</h1>
+        <div>
+            @foreach (var collection in Model.LatestItems.Keys)
+            {
+                <div class="w-auto h-auto rounded-2"
+                     style="margin-left: 0; margin-right: 0; padding: 0 10px;
+                          height: 100%;
+                          background: rgba(0, 0, 0, 0.3) url(@collection.Image) no-repeat center;
+                          background-size: cover;
+                          background-blend-mode: darken;">
+                    <h4 class="mb-4 d-inline">
+                        <a href="@Url.Action("View", "Collections", new {Id = @collection.Id})">
+                            @collection.Name
+                        </a>
+                    </h4>
+                    <p class="dark-grey-text">
+                        @collection.Description
+                    </p>
+                    <div>
+                        @foreach (var field in Model.LatestItems[collection].Keys)
+                        {
+                            <div style="margin: 5px; padding: 2px 5px" class="rounded d-inline-block bg-opacity-50 bg-dark">
+                                <span class="d-inline bg-primary badge"
+                                      style="padding-top: -1px; padding-left: -1px">
+                                    <h6 class="d-inline text-muted">
+                                            @field.Name
+                                    </h6>
+                                </span>
+                                <p class="d-inline" style="padding: 0; margin: 0">
+                                    @Model.LatestItems[collection][field].Content
+                                </p>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <hr style="margin: 10px"/>
+            }
+        </div>
+    </div>
 </div>

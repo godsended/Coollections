@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using Coollections.Models.Database.Items;
+using Coollections.Services;
 using Microsoft.AspNetCore.Mvc;
 using Coollections.ViewModels;
 
@@ -6,10 +8,20 @@ namespace Coollections.Controllers;
 
 public class HomeController : Controller
 {
-    [HttpGet]
-    public IActionResult Index()
+    private readonly ICollectionsFilter collectionsFilter;
+
+    public HomeController(ICollectionsFilter collectionsFilter)
     {
-        return View();
+        this.collectionsFilter = collectionsFilter;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Index()
+    {
+        List<Collection> topCollections = await collectionsFilter.GetTopCollections();
+        Dictionary<Collection, Dictionary<Field, Data>> items = await collectionsFilter.GetLatestItems();
+        HomeViewModel viewModel = new HomeViewModel {LatestItems = items, TopCollections = topCollections};
+        return View(viewModel);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

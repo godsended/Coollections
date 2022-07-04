@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Security.Claims;
 using Coollections.Models;
 using Coollections.Models.Database;
@@ -22,9 +23,12 @@ public class CollectionsController : Controller
 
     [Authorize]
     [HttpGet]
-    public IActionResult Create()
+    public ActionResult Create()
     {
-        CreateCollectionViewModel viewModel = new() {Subjects = databaseContext.Subjects};
+        CreateCollectionViewModel viewModel = new()
+        {
+            Subjects = databaseContext.GetSubjects()
+        };
         return base.View(viewModel);
     }
 
@@ -42,9 +46,10 @@ public class CollectionsController : Controller
     [Route("[controller]/[action]")]
     public async Task<ResponseModel> AddItem(Dictionary<int, string> data)
     {
-        if(!await auth.IsAuthorized())
+        if(await auth.HasAccessToCollection((await databaseContext.GetCollectionByFieldId(data.Keys.ElementAt(0)))!.Id) 
+           == false)
             return new ResponseModel {IsSuccess = false, Message = "Not authorized", Code = 2};
-        if (await databaseContext.AddDataRange(data))
+        if (await databaseContext.AddItem(data))
             return new ResponseModel {IsSuccess = true, Message = "Item successfully saved", Code = 0};
         return new ResponseModel {IsSuccess = false, Message = "Incorrect data", Code = 1};
     }
@@ -59,10 +64,20 @@ public class CollectionsController : Controller
     }
 
     [HttpPost]
-    [Route("[controller]/[action]/{item:int}/{collectionId:int}")]
-    public async Task<ResponseModel> Delete(int item, int collectionId)
+    [Route("[controller]/[action]/{id:int}")]
+    public async Task<ResponseModel> Delete(int id)
     {
-        if(!await auth.IsAuthorized())
+        if(!await auth.HasAccessToCollection(id))
+            return new ResponseModel() {IsSuccess = false, Message = "Not authorized", Code = 2};
+        await databaseContext.DeleteCollection(id);
+        return new ResponseModel() {IsSuccess = true, Message = "Successfully deleted", Code = 0};
+    }
+
+    [HttpPost]
+    [Route("[controller]/[action]/{item:int}/{collectionId:int}")]
+    public async Task<ResponseModel> DeleteItem(int item, int collectionId)
+    {
+        if(!await auth.HasAccessToCollection(collectionId))
             return new ResponseModel() {IsSuccess = false, Message = "Not authorized", Code = 2};
         await databaseContext.RemoveItemFromCollection(item, collectionId);
         return new ResponseModel() {IsSuccess = true, Message = "Successfully deleted", Code = 0};
@@ -72,11 +87,30 @@ public class CollectionsController : Controller
     [Route("[controller]/[action]/{item:int}/{collectionId:int}")]
     public async Task<ResponseModel> EditItem(Dictionary<int, string> data, int item, int collectionId)
     {
-        if(!await auth.IsAuthorized())
+        if(!await auth.HasAccessToCollection(collectionId))
             return new ResponseModel {IsSuccess = false, Message = "Not authorized", Code = 2};
         if (await databaseContext.UpdateDataRange(data, item, collectionId))
             return new ResponseModel {IsSuccess = true, Message = "Item successfully edited", Code = 0};
         return new ResponseModel {IsSuccess = false, Message = "Incorrect data", Code = 1};
+    }
+
+    [HttpPost]
+    [Route("[controller]/[action]/{itemId:int}/")]
+    public async Task<LikeResponseModel> Like(int itemId)
+    {
+        if(!await auth.IsAuthorized())
+            return new LikeResponseModel() {IsSuccess = false, Message = "Not authorized", Code = 2};
+        int userId = auth.GetUserId()!.Value;
+        if (await databaseContext.IsLiked(userId, itemId))
+        {
+            await databaseContext.RemoveLike(userId, itemId);
+            return new LikeResponseModel() {IsSuccess = true, Message = "Unliked", Code = 0, IsLiked = false};
+        }
+        else
+        {
+            await databaseContext.AddLike(new Like{ItemId = itemId, UserId = userId});
+            return new LikeResponseModel() {IsSuccess = true, Message = "Liked", Code = 0, IsLiked = true};
+        }
     }
     private async Task AddCollectionToDatabase(CreateCollectionRequestModel model)
     {
@@ -107,13 +141,14 @@ public class CollectionsController : Controller
         var enumerable = fields.ToList();
         foreach (var field in enumerable)
             data.AddRange(databaseContext.GetDataByFieldId(field.Id).ToArray());
-        
+        IEnumerable<Item> items = databaseContext.GetItemsByCollectionId(collection.Id);
         return new CollectionViewModel()
         {
             Collection = collection,
             Data = data,
             Fields = enumerable,
-            AuthorName = (await databaseContext.GetUserById(collection.AuthorId)).Name
+            AuthorName = (await databaseContext.GetUserById(collection.AuthorId))!.Name,
+            IsEditable = await auth.HasAccessToCollection(collection.Id)
         };
     }
 }

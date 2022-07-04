@@ -1,7 +1,9 @@
 using System.Security.Claims;
 using Coollections.Models.Database;
+using Coollections.Models.Database.Items;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 
 namespace Coollections.Services;
 
@@ -33,7 +35,9 @@ public class Auth : IAuth
         int? id = GetUserId();
         if (id == null)
             return false;
-        return await databaseContext.ContainsUserWithId(id.Value);
+        if (!await databaseContext.ContainsUserWithId(id.Value))
+            return false;
+        return !(await databaseContext.Users.FirstOrDefaultAsync(u => u.Id == id.Value))!.IsBlocked;
     }
 
     public int? GetUserId()
@@ -45,5 +49,12 @@ public class Auth : IAuth
         {
             return result;
         }
+    }
+
+    public async Task<bool> HasAccessToCollection(int collectionId)
+    {
+        Collection? collection = await databaseContext.GetCollectionById(collectionId);
+        return collection != null && await IsAuthorized() && (collection.AuthorId == GetUserId() 
+                                      || await databaseContext.IsAdmin(GetUserId()!.Value));
     }
 }

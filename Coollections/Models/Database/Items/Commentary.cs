@@ -1,9 +1,9 @@
 namespace Coollections.Models.Database.Items;
 
-public class Data
+public class Commentary
 {
     public int Id { get; set; }
-    public int FieldId { get; set; }
-    public string? Content { get; set; } = null!;
+    public int UserId { get; set; }
     public int ItemId { get; set; }
+    public string Content { get; set; } = null!;
 }

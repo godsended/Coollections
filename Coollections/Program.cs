@@ -17,6 +17,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = new PathString("/Auth/Login");
     });
 builder.Services.AddTransient<IAuth, Auth>();
+builder.Services.AddTransient<ICollectionsFilter, CollectionsFilter>();
 
 var app = builder.Build();
 

@@ -1,4 +1,5 @@
 @using Coollections.Models.Database.Items
+@using System.Text.Json
 @model Coollections.ViewModels.CollectionViewModel
 
 @{
@@ -23,9 +24,12 @@
             </p>
             <small>Owner: @Model.AuthorName</small>
         </div>
-        <button type="button" class="btn btn-primary btn-sm d-inline float-end" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            + Add
-        </button>
+        @if (Model.IsEditable)
+        {
+            <button type="button" class="btn btn-primary btn-sm d-inline float-end" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                + Add
+            </button>
+        }
     </div>
 
     <table id="viewTable" class="table table-hover table-striped overflow-auto">
@@ -56,7 +60,7 @@
                     <div id=@i class="collapse">
                         @foreach (var field in Model.Fields)
                         {
-                            <div style="margin: 5px; padding: 2px 5px" class="rounded d-inline-block bg-opacity-50 bg-secondary">
+                            <div style="margin: 5px; padding: 2px 5px" class="rounded d-inline-block bg-opacity-50 bg-dark">
                                 <span class="d-inline bg-primary badge"
                                       style="padding-top: -1px; padding-left: -1px">
                                     <h6 class="d-inline text-muted">@field.Name</h6>
@@ -66,16 +70,26 @@
                                 </p>
                             </div>
                         }
+                        @if (@Model.IsEditable)
+                        {
+                            <div>
+                                <button onclick="deleteItem(@Model.DataGroups[i][0].ItemId)"
+                                        style="margin: 2px" class="btn btn-danger btn-sm float-end">
+                                    Delete
+                                </button>
+                                <button style="margin: 2px" class="btn btn-info btn-sm float-end"
+                                        data-bs-toggle="modal" data-bs-target="#staticEditBackdrop"
+                                        onclick="editItem(@i, @Model.DataGroups[i][0].ItemId)">
+                                    Edit
+                                </button>
+                            </div>
+                        }
                         <div>
-                            <button onclick="deleteItem(@Model.DataGroups[i][0].Item)"
-                                    style="margin: 2px" class="btn btn-danger btn-sm float-end">
-                                Delete
-                            </button>
-                            <button style="margin: 2px" class="btn btn-info btn-sm float-end"
-                                    data-bs-toggle="modal" data-bs-target="#staticEditBackdrop"
-                                    onclick="editItem(@i, @Model.DataGroups[i][0].Item)">
-                                Edit
-                            </button>
+                            <p id="likeesCount_@Model.DataGroups[i][0].ItemId">
+                            </p>
+                            <a id="like_@Model.DataGroups[i][0].ItemId" onclick="like(@Model.DataGroups[i][0].ItemId)">
+                                
+                            </a>
                         </div>
                     </div>
                 </td>
@@ -201,6 +215,7 @@
     </div>
 </div>
 
+<script src="~/js/collections/view.js"></script>
 <script>
     var currentItem;
     
@@ -235,20 +250,13 @@
             dataType: "json"
                 });
     }
-    function collapse(id){
-        let elem = document.getElementById(id);
-        if (elem.classList.contains("collapse"))
-            elem.classList.remove("collapse");
-        else
-            elem.classList.add("collapse");
-    }
     
     function deleteItem(item){
         let reqData = {}
                 
         $.ajax({
             type: "POST",
-            url: "https://localhost:7177/Collections/Delete/" + item.toString() + "/" + @Model.Collection.Id.ToString(),
+            url: "https://localhost:7177/Collections/DeleteItem/" + item.toString() + "/" + @Model.Collection.Id.ToString(),
             data: reqData,
             success: function (result) {
                 console.log(result);

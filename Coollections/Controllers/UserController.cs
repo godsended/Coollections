@@ -36,11 +36,14 @@ public class UserController : Controller
     private async Task<IActionResult> ProcessIdIndexRequest(int id)
     {
         
-        User? user = await databaseContext.Users.FirstOrDefaultAsync(u => u.Id == id).ConfigureAwait(false);
+        User? user = await databaseContext.GetUserById(id);
         if (user != null)
         {
             IEnumerable<Collection> collections = databaseContext.GetCollectionsByAuthorId(id);
-            return View(new UserViewModel() {User = user, Collections = collections});
+            return View(new UserViewModel()
+            {
+                User = user, Collections = collections, IsEditable = user.Id == auth.GetUserId()
+            });
         }
         else return RedirectToAction("Index", "Home");
     }
