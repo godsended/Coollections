@@ -4,9 +4,6 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - Coollections</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.1.3/dist/quartz/bootstrap.min.css"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.1.3/dist/quartz/_bootswatch.scss"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.1.3/dist/quartz/_bootswatch.scss"/>
 </head>
 <body>
 <header>
@@ -33,6 +30,22 @@
                             <span class="visually-hidden">(current)</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <div class="btn-group" role="group" aria-label="langSelect" style="position: fixed; bottom: 10px; left: 10px">
+                            <input type="radio" class="btn-check" name="langSelect" id="engLangSelect" autocomplete="off" checked="">
+                            <label class="btn btn-sm btn-outline-light" for="engLangSelect">English</label>
+                            <input type="radio" class="btn-check" name="langSelect" id="ruLangSelect" autocomplete="off" checked="">
+                            <label class="btn btn-sm btn-outline-light" for="ruLangSelect">Русский</label>
+                        </div>
+                        <div class="btn-group" role="group" aria-label="themeSelect" style="position: fixed; bottom: 10px; right: 10px">
+                            <input onclick="switchToLightTheme()" type="radio" class="btn-check" name="themeSelect"
+                                   id="lightThemeSelect" autocomplete="off" checked="">
+                            <label class="btn btn-sm btn-outline-light" for="lightThemeSelect">Light</label>
+                            <input onclick="switchToDarkTheme()" type="radio" class="btn-check" name="themeSelect" 
+                                   id="darkThemeSelect" autocomplete="off" checked="">
+                            <label class="btn btn-sm btn-outline-dark" for="darkThemeSelect">Dark</label>
+                        </div>
+                    </li>
                 </ul>
                 <form class="d-flex">
                     <input class="form-control me-sm-2" type="text" placeholder="Search">
@@ -51,7 +64,9 @@
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/js/tools/coockies.js"></script>
+<script src="~/js/shared/themes.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
 <script>
     $(document).ready(function() {
         $(window).keydown(function(event){

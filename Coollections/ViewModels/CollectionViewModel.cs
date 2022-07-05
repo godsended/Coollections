@@ -2,7 +2,7 @@ using Coollections.Models.Database.Items;
 
 namespace Coollections.ViewModels;
 
-public class CollectionViewModel
+public class CollectionViewModel : ViewModel
 {
     private readonly List<Data> data = null!;
     private readonly List<Field>? fields;

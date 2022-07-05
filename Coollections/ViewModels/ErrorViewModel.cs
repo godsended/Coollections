@@ -1,6 +1,6 @@
 namespace Coollections.ViewModels;
 
-public class ErrorViewModel
+public class ErrorViewModel : ViewModel
 {
     public string? RequestId { get; set; }
 
