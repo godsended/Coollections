@@ -58,12 +58,12 @@ function createCollection() {
     };
     $.ajax({
         type: "POST",
-        url: "https://localhost:7177/Collections/Create",
+        url: host + "Collections/Create",
         data: reqData,
         success: function (result) {
             console.log(result);
             if (result.isSuccess == true)
-                window.location.href = "https://localhost:7177/User/Index";
+                window.location.href = host + "User/Index";
         }
     })
 }

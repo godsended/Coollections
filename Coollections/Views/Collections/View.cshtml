@@ -234,9 +234,9 @@
     
         let url = "";
         if (!isEdit)
-            url = "https://localhost:7177/Collections/AddItem/";
+            url = host + "Collections/AddItem/";
         else
-            url = "https://localhost:7177/Collections/EditItem/" + currentItem.toString() + "/" + @Model.Collection.Id.ToString()
+            url = host + "Collections/EditItem/" + currentItem.toString() + "/" + @Model.Collection.Id.ToString()
         $.ajax({
             type: "POST",
             url: url,
@@ -256,7 +256,7 @@
                 
         $.ajax({
             type: "POST",
-            url: "https://localhost:7177/Collections/DeleteItem/" + item.toString() + "/" + @Model.Collection.Id.ToString(),
+            url: host + "Collections/DeleteItem/" + item.toString() + "/" + @Model.Collection.Id.ToString(),
             data: reqData,
             success: function (result) {
                 console.log(result);

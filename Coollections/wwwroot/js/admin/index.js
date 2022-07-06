@@ -5,23 +5,23 @@ function toggle(source) {
 }
 
 function blockUsers() {
-    sendPostRequestAndReload(buildReqData(), "https://localhost:7177/Admin/BlockUsers");
+    sendPostRequestAndReload(buildReqData(), host + "Admin/BlockUsers");
 }
 
 function unblockUsers() {
-    sendPostRequestAndReload(buildReqData(), "https://localhost:7177/Admin/UnlockUsers");
+    sendPostRequestAndReload(buildReqData(), host + "Admin/UnlockUsers");
 }
 
 function addAdmins() {
-    sendPostRequestAndReload(buildReqData(), "https://localhost:7177/Admin/AddAdmins");
+    sendPostRequestAndReload(buildReqData(), host + "Admin/AddAdmins");
 }
 
 function removeAdmins() {
-    sendPostRequestAndReload(buildReqData(), "https://localhost:7177/Admin/RemoveAdmins");
+    sendPostRequestAndReload(buildReqData(), host + "Admin/RemoveAdmins");
 }
 
 function deleteUsers() {
-    sendPostRequestAndReload(buildReqData(), "https://localhost:7177/Admin/DeleteUsers");
+    sendPostRequestAndReload(buildReqData(), host + "Admin/DeleteUsers");
 }
 
 function getSelectedIds(){

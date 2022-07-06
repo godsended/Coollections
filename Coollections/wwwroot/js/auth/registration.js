@@ -15,12 +15,12 @@ function requestRegistration()
     let reqData = {Name: name, Email: email, Password: password}
     $.ajax({
         type: "POST",
-        url: "https://localhost:7177/Auth/ProcessRegistration",
+        url: host + "Auth/ProcessRegistration",
         data: reqData,
         success: function (result) {
             console.log(result);
             if (result.code == 0)
-                window.location.href = "https://localhost:7177/Home";
+                window.location.href = host + "Home";
             else errorField.innerText = result.message;
         },
         dataType: "json"
@@ -29,5 +29,5 @@ function requestRegistration()
 
 function openLogin()
 {
-    window.location.href = "https://localhost:7177/Auth/Login";
+    window.location.href = host + "Auth/Login";
 }

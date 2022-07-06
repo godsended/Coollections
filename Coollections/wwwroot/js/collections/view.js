@@ -13,7 +13,7 @@ function like(item){
 
     $.ajax({
         type: "POST",
-        url: "https://localhost:7177/Collections/Like/" + item.toString(),
+        url: host + "Collections/Like/" + item.toString(),
         data: reqData,
         success: function (result) {
             console.log(result);
