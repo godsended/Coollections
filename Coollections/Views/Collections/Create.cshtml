@@ -10,18 +10,20 @@
 <form class="col-lg-6 offset-lg-3 ">
     <fieldset class="row justify-content-center">
         <legend>
-            <h1 class="display-2">New collection</h1>
+            <h1 data-text="New collection" class="display-2 coolang">New collection</h1>
         </legend>
         <div class="form-group">
-            <label for="nameInput" class="form-label mt-4">Name</label>
+            <label data-text="Name" for="nameInput" class="form-label mt-4 coolang">Name</label>
             <input name="Name" type="text" class="form-control" id="nameInput" placeholder="Enter name">
         </div>
         <div class="form-group">
-            <label for="descriptionInput" class="form-label mt-4">Describe your collection</label>
+            <label data-text="Describe your collection" for="descriptionInput" class="form-label mt-4 coolang">
+                Describe your collection
+            </label>
             <textarea class="form-control"id="descriptionInput"></textarea>
         </div>
         <div class="form-group">
-            <label for="subjectInput" class="form-label mt-4">Subject</label>
+            <label data-text="Subject" for="subjectInput" class="form-label mt-4 coolang">Subject</label>
             <select name="Subject" class="form-control" id="subjectInput"
                     placeholder="Enter name">
                 @foreach (Subject subject in Model.Subjects)
@@ -31,7 +33,7 @@
             </select>
         </div>
         <div class="form-group">
-            <label for="imageInput" class="form-label mt-4">Collection image</label>
+            <label data-text="Collection image" for="imageInput" class="form-label mt-4 coolang">Collection image</label>
             <input onchange="onImageUrlChanged()" name="Image" type="url" class="form-control"
                    id="imageInput" placeholder="Type image url">
             <image style="max-height: 100px" id="inputImagePreview" hidden="true"/>
@@ -40,7 +42,7 @@
             <small id="error"></small>
         </div>
         <div>
-            <h2 class="display-6">Fields</h2>
+            <h2 data-text="Fields" class="display-6 coolang">Fields</h2>
         </div>
         <div id="recipientsParent" class="form-group"><div>
                 <div class='input-group mb-3'>
@@ -74,7 +76,7 @@
     </button>
 </div>
 <div class="col-lg-6 offset-lg-3 " style="margin-top: 20px">
-    <button onclick="createCollection()" type="button" class="btn btn-primary d-inline">
+    <button data-text="Create" onclick="createCollection()" type="button" class="btn btn-primary d-inline coolang">
         Create
     </button>
 </div>

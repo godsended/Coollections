@@ -19,37 +19,38 @@
             <div class="collapse navbar-collapse" id="navbarColor01">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" asp-action="Index" asp-controller="Home">
-                            Home
+                        <a data-text="Home" class="nav-link active coolang" asp-action="Index" asp-controller="Home">
                             <span class="visually-hidden">(current)</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" asp-action="Index" asp-controller="User">
+                        <a data-text="Profile" class="nav-link active coolang" asp-action="Index" asp-controller="User">
                             Profile
                             <span class="visually-hidden">(current)</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <div class="btn-group" role="group" aria-label="langSelect" style="position: fixed; bottom: 10px; left: 10px">
-                            <input type="radio" class="btn-check" name="langSelect" id="engLangSelect" autocomplete="off" checked="">
+                            <input type="radio" class="btn-check" name="langSelect" id="engLangSelect" autocomplete="off" 
+                                   onclick="setEnLanguage()" checked="">
                             <label class="btn btn-sm btn-outline-light" for="engLangSelect">English</label>
-                            <input type="radio" class="btn-check" name="langSelect" id="ruLangSelect" autocomplete="off" checked="">
+                            <input type="radio" class="btn-check" name="langSelect" id="ruLangSelect" autocomplete="off"
+                                   onclick="setRuLanguage()" checked="">
                             <label class="btn btn-sm btn-outline-light" for="ruLangSelect">Русский</label>
                         </div>
                         <div class="btn-group" role="group" aria-label="themeSelect" style="position: fixed; bottom: 10px; right: 10px">
                             <input onclick="switchToLightTheme()" type="radio" class="btn-check" name="themeSelect"
                                    id="lightThemeSelect" autocomplete="off" checked="">
-                            <label class="btn btn-sm btn-outline-light" for="lightThemeSelect">Light</label>
+                            <label data-text="Light" class="btn btn-sm btn-outline-light coolang" for="lightThemeSelect"></label>
                             <input onclick="switchToDarkTheme()" type="radio" class="btn-check" name="themeSelect" 
                                    id="darkThemeSelect" autocomplete="off" checked="">
-                            <label class="btn btn-sm btn-outline-dark" for="darkThemeSelect">Dark</label>
+                            <label data-text="Dark" class="btn btn-sm btn-outline-dark coolang" for="darkThemeSelect"></label>
                         </div>
                     </li>
                 </ul>
                 <form class="d-flex">
-                    <input class="form-control me-sm-2" type="text" placeholder="Search">
-                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                    <input class="form-control me-sm-2" type="text">
+                    <button data-text="Search" class="btn btn-secondary my-2 my-sm-0 coolang" type="submit">Search</button>
                 </form>
             </div>
         </div>
@@ -62,7 +63,10 @@
     </main>
 </div>
 
-<script src="~/properties.js"></script>
+<script src="~/js/app.js"></script>
+<script src="~/js/localization/en.js"></script>
+<script src="~/js/localization/ru.js"></script>
+<script src="~/js/shared/localization.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/tools/coockies.js"></script>

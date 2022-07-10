@@ -9,15 +9,15 @@
 <form class="col-lg-6 offset-lg-3 ">
     <fieldset class="row justify-content-center">
         <legend>
-            <h1 class="display-2 text-center">Login</h1>
+            <h1 data-text="Login" class="display-2 text-center coolang">Login</h1>
         </legend>
         <div class="form-group">
-            <label for="emailInput" class="form-label mt-4">Email address</label>
-            <input name="Email" type="email" class="form-control" id="emailInput" aria-describedby="emailHelp" placeholder="Enter email">
+            <label data-text="Email" for="emailInput" class="form-label mt-4 coolang">Email</label>
+            <input name="Email" type="email" class="form-control" id="emailInput" aria-describedby="emailHelp">
         </div>
         <div class="form-group">
-            <label for="passwordInput" class="form-label mt-4">Enter password</label>
-            <input name="Password" type="password" class="form-control" id="passwordInput" placeholder="Password">
+            <label data-text="Password" for="passwordInput" class="form-label mt-4 coolang"></label>
+            <input name="Password" type="password" class="form-control" id="passwordInput">
         </div>
         <div>
             <small id="logError"></small>
@@ -25,10 +25,10 @@
     </fieldset>
 </form>
 <div class="col-lg-6 offset-lg-3 " style="margin-top: 20px">
-    <button onclick="requestLogin()" type="button" class="btn btn-primary d-inline">
+    <button data-text="Login" onclick="requestLogin()" type="button" class="btn btn-primary d-inline coolang">
         Login
     </button>
-    <button onclick="openRegistration()" class="d-inline btn btn-outline-secondary">
+    <button data-text="Registration" onclick="openRegistration()" class="d-inline btn btn-outline-secondary coolang">
         Registration
     </button>
 </div>

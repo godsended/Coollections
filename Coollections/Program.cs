@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Razor;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix);
+builder.Services.AddControllersWithViews().AddViewLocalization(LanguageViewLocationExpanderFormat.SubFolder);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -39,7 +39,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/");
 
-var supportedCultures = new[] { "en", "ru" };
+var supportedCultures = new[] { "ru", "en" };
 var localizationOptions = new RequestLocalizationOptions().SetDefaultCulture(supportedCultures[0])
     .AddSupportedCultures(supportedCultures)
     .AddSupportedUICultures(supportedCultures);

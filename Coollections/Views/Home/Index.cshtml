@@ -6,7 +6,7 @@
 
 <div class="col-lg-6 offset-lg-3 ">
     <div>
-        <h1 class="display-6">Top collections</h1>
+        <h1 data-text="Top collections" class="display-6 coolang">Top collections</h1>
         @foreach (var collection in Model.TopCollections)
         {
             <div class="w-auto h-auto rounded-2"
@@ -28,7 +28,7 @@
         }
     </div>
     <div>
-        <h1 class="display-6">Latest items</h1>
+        <h1 data-text="Latest items" class="display-6 coolang">Latest items</h1>
         <div>
             @foreach (var collection in Model.LatestItems.Keys)
             {

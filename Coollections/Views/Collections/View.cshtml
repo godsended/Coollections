@@ -22,12 +22,17 @@
             <p class="dark-grey-text">
                 @Model.Collection.Description
             </p>
-            <small>Owner: @Model.AuthorName</small>
+            <small>
+                <small class="coolang" data-text="Owner" >Owner</small>: @Model.AuthorName
+            </small>
         </div>
         @if (Model.IsEditable)
         {
             <button type="button" class="btn btn-primary btn-sm d-inline float-end" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                + Add
+                +
+                <p class="coolang d-inline" data-text="Add">
+                    Add
+                </p>
             </button>
         }
     </div>
@@ -74,23 +79,17 @@
                         {
                             <div>
                                 <button onclick="deleteItem(@Model.DataGroups[i][0].ItemId)"
-                                        style="margin: 2px" class="btn btn-danger btn-sm float-end">
+                                        style="margin: 2px" class="btn btn-danger btn-sm float-end coolang" data-text="Delete">
                                     Delete
                                 </button>
-                                <button style="margin: 2px" class="btn btn-info btn-sm float-end"
+                                <button style="margin: 2px" class="btn btn-info btn-sm float-end coolang" data-text="Edit"
                                         data-bs-toggle="modal" data-bs-target="#staticEditBackdrop"
                                         onclick="editItem(@i, @Model.DataGroups[i][0].ItemId)">
                                     Edit
                                 </button>
                             </div>
                         }
-                        <div>
-                            <p id="likeesCount_@Model.DataGroups[i][0].ItemId">
-                            </p>
-                            <a id="like_@Model.DataGroups[i][0].ItemId" onclick="like(@Model.DataGroups[i][0].ItemId)">
-                                
-                            </a>
-                        </div>
+                        
                     </div>
                 </td>
             </tr>
@@ -103,7 +102,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">New item</h5>
+                <h5 data-text="New item" class="modal-title coolang" id="staticBackdropLabel">New item</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -150,8 +149,12 @@
                 }
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="addItem(false)">Add</button>
+                <button data-text="Close" type="button" class="btn btn-secondary coolang" data-bs-dismiss="modal">
+                    
+                </button>
+                <button data-text="Add" type="button" class="btn btn-primary coolang" onclick="addItem(false)">
+                    
+                </button>
             </div>
         </div>
     </div>
@@ -161,7 +164,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Edit item</h5>
+                <h5 data-text="Edit item" class="modal-title coolang" id="staticBackdropLabel">Edit item</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -208,8 +211,8 @@
                 }
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="addItem(true)">Edit</button>
+                <button data-text="Close" type="button" class="btn btn-secondary coolang" data-bs-dismiss="modal">Close</button>
+                <button data-text="Edit" type="button" class="btn btn-primary coolang" onclick="addItem(true)">Edit</button>
             </div>
         </div>
     </div>

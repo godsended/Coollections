@@ -1,4 +1,4 @@
-window.onload = function () {
+function initThemes () {
     if (getCookie("Theme") == null)
         setCookie("Theme", "Light", 30);
     switch (getCookie("Theme")) {

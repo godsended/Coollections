@@ -8,10 +8,10 @@
 <div class="col-lg-6 offset-lg-3">
     <h1 class="display-2">@Model.User.Name</h1>
     <div>
-        <h1 class="display-6 d-inline">Collections</h1>
+        <h1 data-text="Collections" class="display-6 d-inline coolang">Collections</h1>
         @if (Model.IsEditable)
         {
-            <a asp-action="Create" asp-controller="Collections" class="btn btn-sm btn-outline-info"
+            <a data-text="New" asp-action="Create" asp-controller="Collections" class="btn btn-sm btn-outline-info coolang"
                style="margin-bottom: 10px; margin-left: 10px">
                 New
             </a>
@@ -37,7 +37,8 @@
                 <p class="dark-grey-text">
                     @collection.Description
                 </p>
-                <button onclick="deleteCollection(@collection.Id)" style="margin-bottom: 10px" type="button" class="btn btn-primary btn-sm d-inline">
+                <button data-text="Delete" onclick="deleteCollection(@collection.Id)" style="margin-bottom: 10px" 
+                        type="button" class="btn btn-primary btn-sm d-inline coolang">
                     Delete
                 </button>
             </div>

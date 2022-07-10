@@ -7,21 +7,21 @@
 <form class="col-lg-6 offset-lg-3 ">
     <fieldset class="row justify-content-center">
         <legend>
-            <h1 class="text-center display-2">Registration</h1>
+            <h1 data-text="Registration" class="text-center display-2 coolang">Registration</h1>
         </legend>
         <div class="form-group">
-            <label for="nameInput" class="form-label mt-4">Name</label>
+            <label data-text="Name" for="nameInput" class="form-label mt-4 coolang">Name</label>
             <input name="Name" type="text"
-                   class="form-control" id="nameInput" aria-describedby="nameHelp" placeholder="Enter name">
+                   class="form-control" id="nameInput" aria-describedby="nameHelp">
         </div>
         <div class="form-group">
-            <label for="emailInput" class="form-label mt-4">Email address</label>
+            <label data-text="Email" for="emailInput" class="form-label mt-4 coolang">Email address</label>
             <input name="Email" type="email"
-                   class="form-control" id="emailInput" aria-describedby="emailHelp" placeholder="Enter email">
+                   class="form-control" id="emailInput" aria-describedby="emailHelp">
         </div>
         <div class="form-group">
-            <label for="passwordInput" class="form-label mt-4">Enter password</label>
-            <input name="Password" type="password" class="form-control" id="passwordInput" placeholder="Password">
+            <label data-text="Password" for="passwordInput" class="form-label mt-4 coolang">Enter password</label>
+            <input name="Password" type="password" class="form-control" id="passwordInput">
         </div>
         <div>
             <small id="regError"></small>
@@ -29,10 +29,10 @@
     </fieldset>
 </form>
 <div class="col-lg-6 offset-lg-3 " style="margin-top: 20px">
-    <button onclick="requestRegistration()" type="button" class="btn btn-primary d-inline">
+    <button data-text="Registration" onclick="requestRegistration()" type="button" class="btn btn-primary d-inline coolang">
         Register
     </button>
-    <button onclick="openLogin()" class="d-inline btn btn-outline-secondary">
+    <button data-text="Login" onclick="openLogin()" class="d-inline btn btn-outline-secondary coolang">
         Login
     </button>
 </div>
